@@ -94,4 +94,10 @@ abstract class _FormGroup<TControls extends ControlsCollection>
     this.onValidation(this._validators, this._checkGroupValidations,
         () => this.inProcessing = false);
   }
+
+  void runInAction(Function action) {
+    this
+        .reactionOnValidatorDisposers
+        .add(reaction((_) => action(), (_) => this._checkGroupValidations()));
+  }
 }

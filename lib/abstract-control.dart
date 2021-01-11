@@ -217,7 +217,10 @@ abstract class _AbstractControl with Store {
   int _newRequestValidation = 0;
   List<ValidatorsFunction<AbstractControl>> _lastValidators = [];
   Function lastValidationFunction = (() {});
-  List<ReactionDisposer> _reactionOnValidatorDisposers = [];
+  
+  @protected
+  List<ReactionDisposer> reactionOnValidatorDisposers = [];
+  
   @protected
   @action
   Future onValidation<TAbstractControl extends AbstractControl>(
@@ -237,13 +240,13 @@ abstract class _AbstractControl with Store {
     int oldRequestValidation = 0;
     do {
       oldRequestValidation = this._newRequestValidation;
-      this._reactionOnValidatorDisposers.forEach((r) => r());
-      this._reactionOnValidatorDisposers = [];
+      this.reactionOnValidatorDisposers.forEach((r) => r());
+      this.reactionOnValidatorDisposers = [];
       if (this.active) {
         final errorsPromises = this._lastValidators.map((validator) {
           bool isFirstReaction = true;
           final completer = Completer<List<ValidationEvent>>();
-          this._reactionOnValidatorDisposers.add(
+          this.reactionOnValidatorDisposers.add(
                 reaction((_) {
                   dynamic result;
                   if (isFirstReaction) {
@@ -274,13 +277,15 @@ abstract class _AbstractControl with Store {
           events.where((e) => e.type == ValidationEventTypes.Info).toList();
       this._successes =
           events.where((e) => e.type == ValidationEventTypes.Success).toList();
-          
+
       afterCheck();
     });
   }
 
   Future<List<ValidationEvent>> executeAsyncValidation(
       ValidatorsFunction<dynamic> validator);
+
+  void runInAction(Function action);
 
   @protected
   Future<List<ValidationEvent>>
@@ -290,7 +295,7 @@ abstract class _AbstractControl with Store {
   ) {
     bool isFirstReaction = true;
     final completer = Completer<List<ValidationEvent>>();
-    this._reactionOnValidatorDisposers.add(
+    this.reactionOnValidatorDisposers.add(
           reaction((_) {
             dynamic result;
             if (isFirstReaction) {

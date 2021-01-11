@@ -89,16 +89,21 @@ abstract class _FormArray<TAbstractControl extends AbstractControl>
   @override
   Future<List<ValidationEvent>> executeAsyncValidation(
           ValidatorsFunction<FormArray<TAbstractControl>> validator) =>
-      this.baseExecuteAsyncValidation(validator, () {
-        this.serverErrors = [];
-        this._checkArrayValidations();
-      });
+      this.baseExecuteAsyncValidation(
+          validator, () => this._checkArrayValidations());
 
   @action
   _checkArrayValidations() {
     this.inProcessing = true;
+    this.serverErrors = [];
     this.onValidation(this._validators, this._checkArrayValidations,
         () => this.inProcessing = false);
+  }
+
+  void runInAction(Function action) {
+    this
+        .reactionOnValidatorDisposers
+        .add(reaction((_) => action(), (_) => this._checkArrayValidations()));
   }
 
   @action

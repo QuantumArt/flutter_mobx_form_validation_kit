@@ -1,2 +1,7 @@
 # flutter_mobx_form_validation_kit
-Utilities form controls on base mobx for validation on flutter
+
+Mobx flutter form control validation
+
+## Getting Started
+
+Write docs in progress...

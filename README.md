@@ -9,7 +9,7 @@
   - Рассчитан на асинхронные валидации
   - Легко встроить в существующий проект.
 
-Версия для [TypeSript](https://github.com/QuantumArt/mobx_form_validation_kit)
+Версия для [TypeSript](https://www.npmjs.com/package/@quantumart/mobx-form-validation-kit)
 
 - [Getting Started](#get_started2)
 - [Состояние контрола<](#state_control_rus2)

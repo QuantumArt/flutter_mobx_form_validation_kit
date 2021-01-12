@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx_form_validation_kit/control-types.dart';
 import 'package:mobx/mobx.dart';
 
@@ -77,6 +78,11 @@ abstract class _FormControl<TEntity> extends AbstractControl with Store {
     return this._controller;
   }
 
+  FocusNode _focusNode;
+  FocusNode get focusNode {
+    return this._focusNode;
+  }
+
   ReactionDisposer _reactionOnValueGetterDisposer;
   ReactionDisposer _reactionOnInternalValueDisposer;
 
@@ -146,6 +152,13 @@ abstract class _FormControl<TEntity> extends AbstractControl with Store {
         (value) => this.controller.text = value,
       );
     }
+    _focusNode = FocusNode();
+    _focusNode.addListener(() {
+      if (!_focusNode.hasFocus) {
+        this.setTouched(true);
+      }
+      this.setFocused(_focusNode.hasFocus);
+    });
 
     this._reactionOnIsActiveDisposer = reaction(
       (_) => this.active,
@@ -267,6 +280,7 @@ abstract class _FormControl<TEntity> extends AbstractControl with Store {
       this._reactionOnInternalValue();
     }
     this.controller?.dispose();
+    this.focusNode.dispose();
     if (this._reactionOnValueGetterDisposer != null) {
       this._reactionOnValueGetterDisposer();
     }

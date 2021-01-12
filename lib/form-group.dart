@@ -8,10 +8,10 @@ import 'validation-event.dart';
 // Include generated file
 part 'form-group.g.dart';
 
-class OptionsFormGroup {
+class OptionsFormGroup<TControls extends ControlsCollection> {
   /// Validations
   /// Валидациии
-  List<ValidatorsFunction<FormGroup>> validators;
+  List<ValidatorsFunction<FormGroup<TControls>>> validators;
 
   /// Function enable validation by condition (always enabled by default)
   /// Функция включение валидаций по условию (по умолчанию включено всегда)
@@ -30,7 +30,7 @@ class FormGroup<TControls extends ControlsCollection> = _FormGroup<TControls>
 abstract class _FormGroup<TControls extends ControlsCollection>
     extends FormAbstractGroup with Store {
   ReactionDisposer _reactionOnIsActiveDisposer;
-  final List<ValidatorsFunction<FormGroup>> _validators;
+  final List<ValidatorsFunction<FormGroup<TControls>>> _validators;
 
   final TControls controls;
 
@@ -42,7 +42,7 @@ abstract class _FormGroup<TControls extends ControlsCollection>
 
       /// Options
       /// Опции
-      {OptionsFormGroup options})
+      {OptionsFormGroup<TControls> options})
       : _validators = options?.validators ?? [],
         super(
             activate: options?.activate,

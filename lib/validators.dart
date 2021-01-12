@@ -48,7 +48,7 @@ ValidatorsFunction<FormControl<String>> notContainSpacesValidator(
         eventType = ValidationEventTypes.Error}) =>
     (FormControl<String> control) async {
       if (control.value == null ||
-          RegExp(r"!/\s/").allMatches(control.value).isEmpty) {
+          RegExp(r"\s").allMatches(control.value).isEmpty) {
         return [];
       }
       return [

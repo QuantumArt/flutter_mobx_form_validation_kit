@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_mobx_form_validation_kit/form-control.dart';
 import 'package:mobx/mobx.dart';
 
 import 'abstract-control.dart';
@@ -75,8 +76,8 @@ abstract class _FormAbstractGroup extends AbstractControl with Store {
 
   /// Returns a complete list of FormControls without subgroups (terminal elements)
   /// Возвращает полный список FormControl-ов без вложений (терминальные элементы)
-  List<AbstractControl> allControls() {
-    List<AbstractControl> controls = [];
+  List<FormControl> allControls() {
+    List<FormControl> controls = [];
     for (final control in this.getControls()) {
       if (control.type == ControlTypes.Control) {
         controls.add(control);

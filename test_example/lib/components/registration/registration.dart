@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mfvkte/components/input/input-component.dart';
 import 'package:mfvkte/stores/registration/registration-store.dart';
 
 class Registration extends StatefulWidget {
@@ -20,32 +21,35 @@ class _RegistrationState extends State<Registration> {
 
   @override
   Widget build(_) => Observer(builder: (BuildContext context) {
-        return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(store.counter.toString(), style: TextStyle(fontSize: 20)),
-              Text(store.form.controls.name.value,
-                  style: TextStyle(fontSize: 20)),
-              TextField(
-                controller: store.form.controls.name.controller,
-                onChanged: (String text) =>
-                    store.form.controls.name.value = text,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Имя",
-                ),
-              ),
-              SizedBox(height: 100, width: double.infinity),
-              InkWell(
-                onTap: () {
-                  store.counter++;
-                  store.form.controls.name.value = "Виталий";
-                  // debugPrint(_controller.value.selection.toString());
-                  // debugPrint(_controller.value.composing.toString());
-                },
-                child: Text("Тыкни", style: TextStyle(fontSize: 20)),
-              )
-            ]);
+        return InkWell(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InputComponent(
+                    title: "Имя",
+                    control: store.form.controls.firstName,
+                  ),
+                  InputComponent(
+                    title: "Фамилия",
+                    control: store.form.controls.lastName,
+                  ),
+                  InputComponent(
+                    title: "Email",
+                    control: store.form.controls.email,
+                  ),
+                  InputComponent(
+                    title: "Возраст",
+                    control: store.form.controls.age,
+                  ),
+                  InkWell(
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      child: Text("Отправить"),
+                    ),
+                    onTap: this.store.send,
+                  )
+                ]));
       });
 }

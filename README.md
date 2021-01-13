@@ -1,9 +1,5 @@
 # flutter_mobx_form_validation_kit
 
-[![Version](https://img.shields.io/npm/v/@quantumart/flutter_mobx_form_validation_kit?style=flat)](https://www.npmjs.com/package/@quantumart/flutter_mobx_form_validation_kit)
-[![License](https://img.shields.io/npm/l/@quantumart/flutter_mobx_form_validation_kit.svg?style=flat)](https://www.npmjs.com/package/@quantumart/flutter_mobx_form_validation_kit)
-[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://www.npmjs.com/package/@quantumart/flutter_mobx_form_validation_kit)
-
 ### Плюсы пакета<a name="pluses_rus">
   - Совместимость c Android и iOS.
   - Совместимость с Mobx

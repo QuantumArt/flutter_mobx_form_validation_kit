@@ -8,8 +8,12 @@
 
 Версия для [TypeSript](https://www.npmjs.com/package/@quantumart/mobx-form-validation-kit)
 
+- Совместимость с Flutter:
+flutter_mobx_form_validation_kit ^1.0.0 | 2.0.0 - Flutter 1
+flutter_mobx_form_validation_kit ^2.1.0 - Flutter 2
+
 - [Getting Started](#get_started2)
-- [Состояние контрола<](#state_control_rus2)
+- [Состояние контрола](#state_control_rus2)
 - [Валидация](#validation_rus2)
 - [Проверка перед отправкой](#submit_rus2)
 - [Заключение](#final_rus2)

@@ -1,7 +1,7 @@
+import 'package:example/components/input/input-component.dart';
+import 'package:example/stores/registration/registration-store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:test_example/components/input/input-component.dart';
-import 'package:test_example/stores/registration/registration-store.dart';
 
 class Registration extends StatefulWidget {
   const Registration({Key? key}) : super(key: key);

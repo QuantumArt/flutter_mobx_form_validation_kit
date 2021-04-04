@@ -1,7 +1,7 @@
 # flutter_mobx_form_validation_kit
 
 ### Плюсы пакета<a name="pluses_rus">
-  - Совместимость c Android и iOS.
+  - Совместимость c Android, iOS, Web, Desktop и т.д.
   - Совместимость с Mobx
   - Рассчитан на асинхронные валидации
   - Легко встроить в существующий проект.

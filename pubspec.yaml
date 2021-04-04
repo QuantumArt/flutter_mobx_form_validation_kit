@@ -1,5 +1,5 @@
 name: flutter_mobx_form_validation_kit
-description: Mobx flutter form control validation.
+description: It is package for dynamic async validators form controls on Mobx.
 version: 2.1.0
 author: quantumart (Vitalii Alferov)
 homepage: https://github.com/QuantumArt/flutter_mobx_form_validation_kit

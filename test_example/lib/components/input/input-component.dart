@@ -5,7 +5,8 @@ import 'package:flutter_mobx_form_validation_kit/form-control.dart';
 class InputComponent extends StatefulWidget {
   final String title;
   final FormControl<String> control;
-  const InputComponent({Key key, this.title, this.control}) : super(key: key);
+  const InputComponent({Key? key, required this.title, required this.control})
+      : super(key: key);
 
   @override
   _InputComponent createState() => _InputComponent();

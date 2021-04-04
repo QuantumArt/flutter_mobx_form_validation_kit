@@ -12,7 +12,7 @@ import 'package:flutter_mobx_form_validation_kit/validators.dart';
 
 class FormFieldString extends ControlsCollection {
   final FormControl<String> field;
-  FormFieldString({this.field});
+  FormFieldString({required this.field});
 
   @override
   Iterable<AbstractControl> allFields() => [this.field];
@@ -21,7 +21,8 @@ class FormFieldString extends ControlsCollection {
 class FormDoubleFieldString extends ControlsCollection {
   FormControl<String> primaryField;
   FormControl<String> dependentField;
-  FormDoubleFieldString({this.primaryField, this.dependentField});
+  FormDoubleFieldString(
+      {required this.primaryField, required this.dependentField});
 
   @override
   Iterable<AbstractControl> allFields() =>
@@ -31,7 +32,7 @@ class FormDoubleFieldString extends ControlsCollection {
 class FormDoubleField extends ControlsCollection {
   FormControl<int> primaryField;
   FormControl<String> dependentField;
-  FormDoubleField({this.primaryField, this.dependentField});
+  FormDoubleField({required this.primaryField, required this.dependentField});
 
   @override
   Iterable<AbstractControl> allFields() =>
@@ -44,7 +45,6 @@ void main() {
     final setter = (_) {
       countCallSetter++;
     };
-
     final form = FormGroup(FormFieldString(
         field: FormControl<String>(
             value: "test",
@@ -53,6 +53,7 @@ void main() {
               onChangeValidValue: setter,
               callSetterOnInitialize: false,
             ))));
+    
     await form.wait();
     expect(countCallSetter, 0);
     form.dispose();
@@ -60,7 +61,7 @@ void main() {
 
   test("should call setter once when value is changed", () async {
     int countCallSetter = 0;
-    String valueSetter;
+    String? valueSetter;
     final setter = (String value) {
       valueSetter = value;
       countCallSetter++;
@@ -89,7 +90,7 @@ void main() {
   test("should reflect initial value getter changes", () async {
     final field = Observable("test");
 
-    String valueSetter;
+    String? valueSetter;
     final setter = (String value) {
       valueSetter = value;
     };
@@ -142,7 +143,7 @@ void main() {
     final primarySetter = (_) => primaryCountCallSetter++;
     final dependentSetter = (_) => dependentCountCallSetter++;
 
-    var form = Observable<FormGroup<FormDoubleFieldString>>(null);
+    var form = Observable<FormGroup<FormDoubleFieldString>?>(null);
 
     runInAction(() => form.value = FormGroup(FormDoubleFieldString(
           primaryField: FormControl<String>(
@@ -158,35 +159,34 @@ void main() {
                 validators: [requiredValidator()],
                 onChangeValidValue: dependentSetter,
                 activate: () =>
-                    form.value != null &&
-                    form.value.controls.primaryField.value == "foo",
+                    form.value?.controls.primaryField.value == "foo",
                 callSetterOnInitialize: false,
               )),
         )));
 
-    await form.value.wait();
+    await form.value!.wait();
 
     expect(primaryCountCallSetter, 0);
     expect(dependentCountCallSetter, 0);
 
-    form.value.dispose();
+    form.value!.dispose();
   });
 
   test("should call setter once when activated after initialization", () async {
     int primaryCountCallSetter = 0;
-    int primaryValueSetter;
+    int? primaryValueSetter;
     final primarySetter = (int value) {
       primaryValueSetter = value;
       primaryCountCallSetter++;
     };
     int dependentCountCallSetter = 0;
-    String dependentValueSetter;
+    String? dependentValueSetter;
     final dependentSetter = (String value) {
       dependentValueSetter = value;
       dependentCountCallSetter++;
     };
 
-    var form = Observable<FormGroup<FormDoubleField>>(null);
+    var form = Observable<FormGroup<FormDoubleField>?>(null);
 
     runInAction(() => form.value = FormGroup(FormDoubleField(
         primaryField: FormControl<int>(
@@ -201,32 +201,30 @@ void main() {
             options: OptionsFormControl<String>(
               validators: [requiredValidator()],
               onChangeValidValue: dependentSetter,
-              activate: () =>
-                  form.value != null &&
-                  form.value.controls.primaryField.value == 456,
+              activate: () => form.value?.controls.primaryField.value == 456,
               callSetterOnInitialize: false,
             )))));
 
-    await form.value.wait();
+    await form.value!.wait();
 
     expect(primaryCountCallSetter, 0);
-    expect(form.value.controls.primaryField.value, 123);
+    expect(form.value!.controls.primaryField.value, 123);
 
     expect(dependentCountCallSetter, 0);
-    expect(form.value.controls.dependentField.value, "bar");
+    expect(form.value!.controls.dependentField.value, "bar");
 
-    form.value.controls.primaryField.value = 456;
-    await form.value.wait();
+    form.value!.controls.primaryField.value = 456;
+    await form.value!.wait();
 
     expect(primaryCountCallSetter, 1);
     expect(primaryValueSetter, 456);
-    expect(form.value.controls.primaryField.value, 456);
+    expect(form.value!.controls.primaryField.value, 456);
 
     expect(dependentCountCallSetter, 1);
     expect(dependentValueSetter, "bar");
-    expect(form.value.controls.dependentField.value, "bar");
+    expect(form.value!.controls.dependentField.value, "bar");
 
-    form.value.dispose();
+    form.value!.dispose();
   });
 
   test('test array', () async {

@@ -11,15 +11,15 @@ part 'form-array.g.dart';
 class OptionsFormArray<TAbstractControl extends AbstractControl> {
   /// Validations
   /// Валидациии
-  List<ValidatorsFunction<FormArray<TAbstractControl>>> validators;
+  List<ValidatorsFunction<FormArray<TAbstractControl>>>? validators;
 
   /// Function enable validation by condition (always enabled by default)
   /// Функция включение валидаций по условию (по умолчанию включено всегда)
-  bool Function() activate;
+  bool Function()? activate;
 
   /// Additional information
   /// Блок с дополнительной информацией
-  dynamic additionalData;
+  dynamic? additionalData;
 
   OptionsFormArray({this.validators, this.activate, this.additionalData});
 }
@@ -29,7 +29,7 @@ class FormArray<TAbstractControl extends AbstractControl> = _FormArray<
 
 abstract class _FormArray<TAbstractControl extends AbstractControl>
     extends FormAbstractGroup with Store {
-  ReactionDisposer _reactionOnIsActiveDisposer;
+  late ReactionDisposer _reactionOnIsActiveDisposer;
 
   @observable
   ObservableList<TAbstractControl> controls;
@@ -49,7 +49,7 @@ abstract class _FormArray<TAbstractControl extends AbstractControl>
 
       /// Options
       /// Опции
-      {OptionsFormArray<TAbstractControl> options})
+      {OptionsFormArray<TAbstractControl>? options})
       : _validators = options?.validators ?? [],
         super(
             activate: options?.activate,
@@ -87,10 +87,11 @@ abstract class _FormArray<TAbstractControl extends AbstractControl>
   }
 
   @override
-  Future<List<ValidationEvent>> executeAsyncValidation(
-          ValidatorsFunction<FormArray<TAbstractControl>> validator) =>
-      this.baseExecuteAsyncValidation(
-          validator, () => this._checkArrayValidations());
+  Future<List<ValidationEvent>>
+      executeAsyncValidation<TAbstractControl extends AbstractControl>(
+              ValidatorsFunction<TAbstractControl> validator) =>
+          this.baseExecuteAsyncValidation(
+              validator, () => this._checkArrayValidations());
 
   @action
   _checkArrayValidations() {
@@ -124,9 +125,8 @@ abstract class _FormArray<TAbstractControl extends AbstractControl>
     this.onChange.add(this);
   }
 
-  @action
   TAbstractControl lastWhere(bool Function(TAbstractControl element) test,
-      {TAbstractControl Function() orElse}) {
+      {TAbstractControl Function()? orElse}) {
     final result = this.controls.lastWhere(test, orElse: orElse);
     this.onChange.add(this);
     return result;
@@ -184,7 +184,7 @@ abstract class _FormArray<TAbstractControl extends AbstractControl>
   }
 
   TAbstractControl firstWhere(bool Function(TAbstractControl element) test,
-      {TAbstractControl Function() orElse}) {
+      {TAbstractControl Function()? orElse}) {
     final result = this.controls.firstWhere(test, orElse: orElse);
     this.onChange.add(this);
     return result;

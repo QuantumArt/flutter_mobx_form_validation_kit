@@ -11,15 +11,15 @@ part 'form-group.g.dart';
 class OptionsFormGroup<TControls extends ControlsCollection> {
   /// Validations
   /// Валидациии
-  List<ValidatorsFunction<FormGroup<TControls>>> validators;
+  List<ValidatorsFunction<FormGroup<TControls>>>? validators;
 
   /// Function enable validation by condition (always enabled by default)
   /// Функция включение валидаций по условию (по умолчанию включено всегда)
-  bool Function() activate;
+  bool Function()? activate;
 
   /// Additional information
   /// Блок с дополнительной информацией
-  dynamic additionalData;
+  dynamic? additionalData;
 
   OptionsFormGroup({this.validators, this.activate, this.additionalData});
 }
@@ -29,7 +29,7 @@ class FormGroup<TControls extends ControlsCollection> = _FormGroup<TControls>
 
 abstract class _FormGroup<TControls extends ControlsCollection>
     extends FormAbstractGroup with Store {
-  ReactionDisposer _reactionOnIsActiveDisposer;
+  late ReactionDisposer _reactionOnIsActiveDisposer;
   final List<ValidatorsFunction<FormGroup<TControls>>> _validators;
 
   final TControls controls;
@@ -42,7 +42,7 @@ abstract class _FormGroup<TControls extends ControlsCollection>
 
       /// Options
       /// Опции
-      {OptionsFormGroup<TControls> options})
+      {OptionsFormGroup<TControls>? options})
       : _validators = options?.validators ?? [],
         super(
             activate: options?.activate,
@@ -78,12 +78,13 @@ abstract class _FormGroup<TControls extends ControlsCollection>
   }
 
   @override
-  Future<List<ValidationEvent>> executeAsyncValidation(
-          ValidatorsFunction<FormGroup> validator) =>
-      this.baseExecuteAsyncValidation(validator, () {
-        this.serverErrors = [];
-        this._checkGroupValidations();
-      });
+  Future<List<ValidationEvent>>
+      executeAsyncValidation<TAbstractControl extends AbstractControl>(
+              ValidatorsFunction<TAbstractControl> validator) =>
+          this.baseExecuteAsyncValidation(validator, () {
+            this.serverErrors = [];
+            this._checkGroupValidations();
+          });
 
   @override
   Iterable<AbstractControl> getControls() => this.controls.allFields();

@@ -9,7 +9,7 @@ import 'package:flutter_mobx_form_validation_kit/validators.dart';
 class FormRange extends ControlsCollection {
   final FormControl<DateTime> min;
   final FormControl<DateTime> max;
-  FormRange({this.min, this.max});
+  FormRange({required this.min, required this.max});
   @override
   Iterable<AbstractControl> allFields() => [this.min, this.max];
 }
@@ -21,7 +21,11 @@ class RegistrationForm extends ControlsCollection {
   final FormControl<String> age;
   final FormGroup<FormRange> dateRange;
   RegistrationForm(
-      {this.firstName, this.lastName, this.email, this.age, this.dateRange});
+      {required this.firstName,
+      required this.lastName,
+      required this.email,
+      required this.age,
+      required this.dateRange});
 
   @override
   Iterable<AbstractControl> allFields() =>
@@ -29,7 +33,7 @@ class RegistrationForm extends ControlsCollection {
 }
 
 class RegistrationStore {
-  FormGroup<RegistrationForm> form;
+  late FormGroup<RegistrationForm> form;
 
   RegistrationStore() {
     this.form = FormGroup(RegistrationForm(
@@ -81,8 +85,7 @@ class RegistrationStore {
     if (this.form.invalid) {
       this.form.setTouched(true);
       final firstError = this.form.allControls().firstWhere((c) => c.invalid);
-      firstError.focusNode.requestFocus();
+      firstError.focusNode?.requestFocus();
     }
-
   }
 }

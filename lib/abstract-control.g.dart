@@ -9,61 +9,61 @@ part of 'abstract-control.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$AbstractControl on _AbstractControl, Store {
-  Computed<bool> _$disabledComputed;
+  Computed<bool>? _$disabledComputed;
 
   @override
   bool get disabled =>
       (_$disabledComputed ??= Computed<bool>(() => super.disabled,
               name: '_AbstractControl.disabled'))
           .value;
-  Computed<bool> _$activeComputed;
+  Computed<bool>? _$activeComputed;
 
   @override
   bool get active => (_$activeComputed ??=
           Computed<bool>(() => super.active, name: '_AbstractControl.active'))
       .value;
-  Computed<bool> _$validComputed;
+  Computed<bool>? _$validComputed;
 
   @override
   bool get valid => (_$validComputed ??=
           Computed<bool>(() => super.valid, name: '_AbstractControl.valid'))
       .value;
-  Computed<bool> _$pristineComputed;
+  Computed<bool>? _$pristineComputed;
 
   @override
   bool get pristine =>
       (_$pristineComputed ??= Computed<bool>(() => super.pristine,
               name: '_AbstractControl.pristine'))
           .value;
-  Computed<bool> _$untouchedComputed;
+  Computed<bool>? _$untouchedComputed;
 
   @override
   bool get untouched =>
       (_$untouchedComputed ??= Computed<bool>(() => super.untouched,
               name: '_AbstractControl.untouched'))
           .value;
-  Computed<ObservableList<String>> _$serverErrorsComputed;
+  Computed<ObservableList<String>>? _$serverErrorsComputed;
 
   @override
   ObservableList<String> get serverErrors => (_$serverErrorsComputed ??=
           Computed<ObservableList<String>>(() => super.serverErrors,
               name: '_AbstractControl.serverErrors'))
       .value;
-  Computed<List<ValidationEvent>> _$errorsComputed;
+  Computed<List<ValidationEvent>>? _$errorsComputed;
 
   @override
   List<ValidationEvent> get errors =>
       (_$errorsComputed ??= Computed<List<ValidationEvent>>(() => super.errors,
               name: '_AbstractControl.errors'))
           .value;
-  Computed<List<ValidationEvent>> _$warningsComputed;
+  Computed<List<ValidationEvent>>? _$warningsComputed;
 
   @override
   List<ValidationEvent> get warnings => (_$warningsComputed ??=
           Computed<List<ValidationEvent>>(() => super.warnings,
               name: '_AbstractControl.warnings'))
       .value;
-  Computed<List<ValidationEvent>> _$informationMessagesComputed;
+  Computed<List<ValidationEvent>>? _$informationMessagesComputed;
 
   @override
   List<ValidationEvent> get informationMessages =>
@@ -71,14 +71,14 @@ mixin _$AbstractControl on _AbstractControl, Store {
               () => super.informationMessages,
               name: '_AbstractControl.informationMessages'))
           .value;
-  Computed<List<ValidationEvent>> _$successesComputed;
+  Computed<List<ValidationEvent>>? _$successesComputed;
 
   @override
   List<ValidationEvent> get successes => (_$successesComputed ??=
           Computed<List<ValidationEvent>>(() => super.successes,
               name: '_AbstractControl.successes'))
       .value;
-  Computed<ValidationEventTypes> _$maxEventLevelComputed;
+  Computed<ValidationEventTypes>? _$maxEventLevelComputed;
 
   @override
   ValidationEventTypes get maxEventLevel => (_$maxEventLevelComputed ??=

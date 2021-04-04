@@ -9,38 +9,38 @@ part of 'form-control.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$FormControl<TEntity> on _FormControl<TEntity>, Store {
-  Computed<bool> _$dirtyComputed;
+  Computed<bool>? _$dirtyComputed;
 
   @override
   bool get dirty => (_$dirtyComputed ??=
           Computed<bool>(() => super.dirty, name: '_FormControl.dirty'))
       .value;
-  Computed<bool> _$touchedComputed;
+  Computed<bool>? _$touchedComputed;
 
   @override
   bool get touched => (_$touchedComputed ??=
           Computed<bool>(() => super.touched, name: '_FormControl.touched'))
       .value;
-  Computed<bool> _$focusedComputed;
+  Computed<bool>? _$focusedComputed;
 
   @override
   bool get focused => (_$focusedComputed ??=
           Computed<bool>(() => super.focused, name: '_FormControl.focused'))
       .value;
-  Computed<bool> _$processingComputed;
+  Computed<bool>? _$processingComputed;
 
   @override
   bool get processing =>
       (_$processingComputed ??= Computed<bool>(() => super.processing,
               name: '_FormControl.processing'))
           .value;
-  Computed<TEntity> _$valueComputed;
+  Computed<TEntity>? _$valueComputed;
 
   @override
   TEntity get value => (_$valueComputed ??=
           Computed<TEntity>(() => super.value, name: '_FormControl.value'))
       .value;
-  Computed<bool> _$invalidComputed;
+  Computed<bool>? _$invalidComputed;
 
   @override
   bool get invalid => (_$invalidComputed ??=
@@ -50,13 +50,13 @@ mixin _$FormControl<TEntity> on _FormControl<TEntity>, Store {
   final _$_internalValueAtom = Atom(name: '_FormControl._internalValue');
 
   @override
-  TEntity get _internalValue {
+  TEntity? get _internalValue {
     _$_internalValueAtom.reportRead();
     return super._internalValue;
   }
 
   @override
-  set _internalValue(TEntity value) {
+  set _internalValue(TEntity? value) {
     _$_internalValueAtom.reportWrite(value, super._internalValue, () {
       super._internalValue = value;
     });

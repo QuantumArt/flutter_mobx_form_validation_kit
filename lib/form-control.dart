@@ -10,23 +10,23 @@ import 'validation-event.dart';
 part 'form-control.g.dart';
 
 class OptionsFormControl<TEntity> {
-  final List<ValidatorsFunction<FormControl<TEntity>>> validators;
+  final List<ValidatorsFunction<FormControl<TEntity>>>? validators;
 
   /// Function enable validation by condition (always enabled by default)
   /// Функция включение валидаций по условию (по умолчанию включено всегда)
-  final bool Function() activate;
+  final bool Function()? activate;
 
   /// Additional information
   /// Блок с дополнительной информацией
-  final dynamic additionalData;
+  final dynamic? additionalData;
 
   /// Callback always when value changes
   /// Срабатывает всегда при изменении значения
-  final UpdateValidValueHandler<TEntity> onChangeValue;
+  final UpdateValidValueHandler<TEntity>? onChangeValue;
 
   /// Callback get last valid value
   /// Передает последние валидное значение
-  final UpdateValidValueHandler<TEntity> onChangeValidValue;
+  final UpdateValidValueHandler<TEntity>? onChangeValidValue;
 
   /// Invoke [onChangeValidValue] when [FormControl] is created.
   /// Вызвать [onChangeValidValue] при создании [FormControl].
@@ -70,26 +70,27 @@ class FormControl<TEntity> = _FormControl<TEntity> with _$FormControl;
 
 abstract class _FormControl<TEntity> extends AbstractControl with Store {
   @observable
-  TEntity _internalValue;
+  TEntity? _internalValue;
 
-  FormControlTextEditingController _controller;
+  FormControlTextEditingController? _controller;
 
-  FormControlTextEditingController get controller {
+  FormControlTextEditingController? get controller {
     return this._controller;
   }
 
-  FocusNode _focusNode;
-  FocusNode get focusNode {
+  FocusNode? _focusNode;
+  FocusNode? get focusNode {
     return this._focusNode;
   }
 
-  ReactionDisposer _reactionOnValueGetterDisposer;
-  ReactionDisposer _reactionOnInternalValueDisposer;
+  ReactionDisposer? _reactionOnValueGetterDisposer;
+  ReactionDisposer? _reactionOnInternalValueDisposer;
 
-  ReactionDisposer _reactionOnInternalValue;
-  ReactionDisposer _reactionOnIsActiveDisposer;
-  ReactionDisposer _reactionOnIsDirtyDisposer;
-  ReactionDisposer _reactionOnIsFocusedDisposer;
+  ReactionDisposer? _reactionOnInternalValue;
+  late ReactionDisposer _reactionOnIsActiveDisposer;
+  late ReactionDisposer _reactionOnIsDirtyDisposer;
+  late ReactionDisposer _reactionOnIsFocusedDisposer;
+
   final List<ValidatorsFunction<FormControl<TEntity>>> _validators;
   final UpdateValidValueHandler<TEntity> _setValidValue;
   final UpdateValidValueHandler<TEntity> _onChangeValue;
@@ -131,9 +132,9 @@ abstract class _FormControl<TEntity> extends AbstractControl with Store {
   }
 
   _FormControl(
-      {TEntity value,
-      TEntity Function() getterValue,
-      OptionsFormControl<TEntity> options})
+      {TEntity? value,
+      TEntity Function()? getterValue,
+      OptionsFormControl<TEntity>? options})
       : _validators = options?.validators ?? [],
         _setValidValue = options?.onChangeValidValue ?? ((_) {}),
         _onChangeValue = options?.onChangeValue ?? ((_) {}),
@@ -149,15 +150,15 @@ abstract class _FormControl<TEntity> extends AbstractControl with Store {
       this._controller = FormControlTextEditingController();
       this._reactionOnInternalValue = reaction(
         (_) => this._internalValue,
-        (value) => this.controller.text = value,
+        (value) => this.controller!.text = value as String,
       );
     }
     _focusNode = FocusNode();
-    _focusNode.addListener(() {
-      if (!_focusNode.hasFocus) {
+    _focusNode!.addListener(() {
+      if (!_focusNode!.hasFocus) {
         this.setTouched(true);
       }
-      this.setFocused(_focusNode.hasFocus);
+      this.setFocused(_focusNode!.hasFocus);
     });
 
     this._reactionOnIsActiveDisposer = reaction(
@@ -197,7 +198,7 @@ abstract class _FormControl<TEntity> extends AbstractControl with Store {
   @action
   FormControl<TEntity> setDirty(bool dirty) {
     this._isDirty = dirty;
-    return this;
+    return this as FormControl<TEntity>;
   }
 
   /// Set marker "field was in focus"
@@ -206,18 +207,18 @@ abstract class _FormControl<TEntity> extends AbstractControl with Store {
   @action
   FormControl<TEntity> setTouched(bool touched) {
     this._isTouched = touched;
-    return this;
+    return this as FormControl<TEntity>;
   }
 
   @action
   FormControl<TEntity> setFocused(bool focused) {
     this._isFocused = focused;
-    return this;
+    return this as FormControl<TEntity>;
   }
 
   @computed
   TEntity get value {
-    return this._internalValue;
+    return this._internalValue!;
   }
 
   set value(TEntity value) {
@@ -232,14 +233,14 @@ abstract class _FormControl<TEntity> extends AbstractControl with Store {
   }
 
   FormControl<TEntity> setInitialValue({
-    TEntity value,
-    TEntity Function() getterValue,
+    TEntity? value,
+    TEntity Function()? getterValue,
   }) {
     assert(!(value != null && getterValue != null),
         "use \"value\" or \"getterValue\"");
-    final getter = getterValue ?? () => value;
+    final getter = getterValue ?? () => value!;
     if (this._reactionOnValueGetterDisposer != null) {
-      this._reactionOnValueGetterDisposer();
+      this._reactionOnValueGetterDisposer!();
     }
 
     this._reactionOnValueGetterDisposer = reaction(
@@ -247,7 +248,7 @@ abstract class _FormControl<TEntity> extends AbstractControl with Store {
       (TEntity initialValue) {
         this.inProcessing = true;
         if (this._reactionOnInternalValueDisposer != null) {
-          this._reactionOnInternalValueDisposer();
+          this._reactionOnInternalValueDisposer!();
         }
 
         this._internalValue = initialValue;
@@ -255,7 +256,7 @@ abstract class _FormControl<TEntity> extends AbstractControl with Store {
         this._reactionOnInternalValueDisposer = reaction(
           (_) => this._internalValue,
           (_) {
-            runInAction(() => this._onChangeValue(this._internalValue));
+            runInAction(() => this._onChangeValue(this._internalValue!));
             this._isDirty = true;
             this.serverErrors = [];
             this._checkInternalValue(true);
@@ -270,22 +271,22 @@ abstract class _FormControl<TEntity> extends AbstractControl with Store {
       fireImmediately: true,
     );
 
-    return this;
+    return this as FormControl<TEntity>;
   }
 
   @override
   void dispose() {
     super.dispose();
     if (this._reactionOnInternalValue != null) {
-      this._reactionOnInternalValue();
+      this._reactionOnInternalValue!();
     }
     this.controller?.dispose();
-    this.focusNode.dispose();
+    this.focusNode?.dispose();
     if (this._reactionOnValueGetterDisposer != null) {
-      this._reactionOnValueGetterDisposer();
+      this._reactionOnValueGetterDisposer!();
     }
     if (this._reactionOnInternalValueDisposer != null) {
-      this._reactionOnInternalValueDisposer();
+      this._reactionOnInternalValueDisposer!();
     }
     this._reactionOnIsActiveDisposer();
     this._reactionOnIsDirtyDisposer();
@@ -298,7 +299,7 @@ abstract class _FormControl<TEntity> extends AbstractControl with Store {
     this.onValidation<FormControl<TEntity>>(
         this._validators, () => this._checkInternalValue(true), () {
       if (shouldCallSetter && this.errors.length == 0) {
-        this._setValidValue(this._internalValue);
+        this._setValidValue(this._internalValue!);
       }
       this.inProcessing = false;
     });
@@ -311,10 +312,11 @@ abstract class _FormControl<TEntity> extends AbstractControl with Store {
   }
 
   @override
-  Future<List<ValidationEvent>> executeAsyncValidation(
-          ValidatorsFunction<FormControl<TEntity>> validator) =>
-      this.baseExecuteAsyncValidation(validator, () {
-        this.serverErrors = [];
-        this._checkInternalValue(true);
-      });
+  Future<List<ValidationEvent>>
+      executeAsyncValidation<TAbstractControl extends AbstractControl>(
+              ValidatorsFunction<TAbstractControl> validator) =>
+          this.baseExecuteAsyncValidation(validator, () {
+            this.serverErrors = [];
+            this._checkInternalValue(true);
+          });
 }

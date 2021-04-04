@@ -10,7 +10,7 @@ part of 'form-array.dart';
 
 mixin _$FormArray<TAbstractControl extends AbstractControl>
     on _FormArray<TAbstractControl>, Store {
-  Computed<int> _$lengthComputed;
+  Computed<int>? _$lengthComputed;
 
   @override
   int get length => (_$lengthComputed ??=
@@ -73,18 +73,6 @@ mixin _$FormArray<TAbstractControl extends AbstractControl>
         _$_FormArrayActionController.startAction(name: '_FormArray.clear');
     try {
       return super.clear();
-    } finally {
-      _$_FormArrayActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  TAbstractControl lastWhere(bool Function(TAbstractControl) test,
-      {TAbstractControl Function() orElse}) {
-    final _$actionInfo =
-        _$_FormArrayActionController.startAction(name: '_FormArray.lastWhere');
-    try {
-      return super.lastWhere(test, orElse: orElse);
     } finally {
       _$_FormArrayActionController.endAction(_$actionInfo);
     }

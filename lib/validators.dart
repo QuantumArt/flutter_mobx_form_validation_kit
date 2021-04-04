@@ -10,7 +10,7 @@ ValidatorsFunction<FormControl<TEntity>> requiredValidator<TEntity>(
         eventType = ValidationEventTypes.Error}) =>
     (FormControl<TEntity> control) async {
       if (control.value == null ||
-          (TEntity == String && (control.value as String)?.isEmpty == true)) {
+          (TEntity == String && (control.value as String).isEmpty == true)) {
         return [
           ValidationEvent(
             key: requiredValidatorKey,
@@ -86,7 +86,7 @@ ValidatorsFunction<FormControl<String>> patternValidator(
 ///  Error if there is a pattern match
 ///  Ошибка, если есть соответствие паттерну
 ValidatorsFunction<FormControl<String>> invertPatternValidator({
-  RegExp regExp,
+  required RegExp regExp,
   String message = 'Присутствуют недопустимые символы',
   eventType = ValidationEventTypes.Error,
 }) =>
@@ -106,7 +106,7 @@ ValidatorsFunction<FormControl<String>> invertPatternValidator({
 
 const minLengthValidatorKey = 'minlength';
 ValidatorsFunction<FormControl<String>> minLengthValidator(int minlength,
-    {String message, eventType = ValidationEventTypes.Error}) {
+    {String? message, eventType = ValidationEventTypes.Error}) {
   message = message ?? "Минимальная длина $minlength";
   return (FormControl<String> control) async {
     if (control.value == null ||
@@ -117,7 +117,7 @@ ValidatorsFunction<FormControl<String>> minLengthValidator(int minlength,
     return [
       ValidationEvent(
         key: minLengthValidatorKey,
-        message: message,
+        message: message!,
         type: eventType,
       )
     ];
@@ -126,7 +126,7 @@ ValidatorsFunction<FormControl<String>> minLengthValidator(int minlength,
 
 const maxLengthValidatorKey = 'maxlength';
 ValidatorsFunction<FormControl<String>> maxLengthValidator(int maxlength,
-    {String message, eventType = ValidationEventTypes.Error}) {
+    {String? message, eventType = ValidationEventTypes.Error}) {
   message = message ?? "Максимальная длина $maxlength";
   return (FormControl<String> control) async {
     if (control.value == null || control.value.length <= maxlength) {
@@ -135,7 +135,7 @@ ValidatorsFunction<FormControl<String>> maxLengthValidator(int maxlength,
     return [
       ValidationEvent(
         key: maxLengthValidatorKey,
-        message: message,
+        message: message!,
         type: eventType,
       )
     ];
@@ -144,7 +144,7 @@ ValidatorsFunction<FormControl<String>> maxLengthValidator(int maxlength,
 
 const absoluteLengthValidatorKey = 'absoluteLength';
 ValidatorsFunction<FormControl<String>> absoluteLengthValidator(int length,
-    {String message, eventType = ValidationEventTypes.Error}) {
+    {String? message, eventType = ValidationEventTypes.Error}) {
   message = message ?? "Длина отлична от $length";
   return (FormControl<String> control) async {
     if (control.value == null || control.value.length == length) {
@@ -153,7 +153,7 @@ ValidatorsFunction<FormControl<String>> absoluteLengthValidator(int length,
     return [
       ValidationEvent(
         key: absoluteLengthValidatorKey,
-        message: message,
+        message: message!,
         type: eventType,
       )
     ];
@@ -163,8 +163,8 @@ ValidatorsFunction<FormControl<String>> absoluteLengthValidator(int length,
 const minValueValidatorKey = 'minValue';
 ValidatorsFunction<FormControl<TEntity>>
     minValueValidator<TEntity extends num>({
-  TEntity min,
-  TEntity Function() getterMin,
+  TEntity? min,
+  TEntity Function()? getterMin,
   String message = 'Значение слишком маленькое',
   eventType = ValidationEventTypes.Error,
 }) {
@@ -172,7 +172,7 @@ ValidatorsFunction<FormControl<TEntity>>
       !(min != null && getterMin != null), "use \"value\" or \"getterValue\"");
   assert(
       !(min == null && getterMin == null), "use \"value\" or \"getterValue\"");
-  final getMin = getterMin ?? () => min;
+  final getMin = getterMin ?? () => min!;
   return (FormControl<TEntity> control) async {
     if (control.value == null) {
       return [];
@@ -202,8 +202,8 @@ ValidatorsFunction<FormControl<TEntity>>
 const maxValueValidatorKey = 'minValue';
 ValidatorsFunction<FormControl<TEntity>>
     maxValueValidator<TEntity extends num>({
-  TEntity max,
-  TEntity Function() getterMax,
+  TEntity? max,
+  TEntity Function()? getterMax,
   String message = 'Значение слишком большое',
   eventType = ValidationEventTypes.Error,
 }) {
@@ -211,7 +211,7 @@ ValidatorsFunction<FormControl<TEntity>>
       !(max != null && getterMax != null), "use \"value\" or \"getterValue\"");
   assert(
       !(max == null && getterMax == null), "use \"value\" or \"getterValue\"");
-  final getMax = getterMax ?? () => max;
+  final getMax = getterMax ?? () => max!;
   return (FormControl<TEntity> control) async {
     if (control.value == null) {
       return [];
@@ -283,26 +283,27 @@ ValidatorsFunction<FormControl<TEntity>> isEqualValidator<TEntity>(
 
 ///  Runs validations only if activation conditions are met
 ///  Запускает валидации только если условие активации выполнено
-ValidatorsFunction<TAbstractControl> wrapperActivateValidation<
-        TAbstractControl extends AbstractControl>(
+ValidatorsFunction<TAbstractControl>
+    wrapperActivateValidation<TAbstractControl extends AbstractControl>(
   bool Function(TAbstractControl control) activate,
   List<ValidatorsFunction<TAbstractControl>> validators, {
-  List<ValidatorsFunction<TAbstractControl>> elseValidators,
+  List<ValidatorsFunction<TAbstractControl>>? elseValidators,
 }) =>
-    (TAbstractControl control) async {
-      if (activate(control)) {
-        final validations = await Future.wait((validators ?? []).map(
-            (validator) => control
-                .executeAsyncValidation((control) => validator(control))));
-        return combineErrors(validations);
-      }
-      if (elseValidators != null && elseValidators.length > 0) {
-        final validations = await Future.wait(elseValidators.map((validator) =>
-            control.executeAsyncValidation((control) => validator(control))));
-        return combineErrors(validations);
-      }
-      return [];
-    };
+        (TAbstractControl control) async {
+          if (activate(control)) {
+            final validations = await Future.wait((validators).map(
+                (validator) => control.executeAsyncValidation(
+                    (control) => validator(control as TAbstractControl))));
+            return combineErrors(validations);
+          }
+          if (elseValidators != null && elseValidators.length > 0) {
+            final validations = await Future.wait(elseValidators.map(
+                (validator) => control.executeAsyncValidation(
+                    (control) => validator(control as TAbstractControl))));
+            return combineErrors(validations);
+          }
+          return [];
+        };
 
 /// Wrapper for sequential validations (The next validation is launched only after the previous one passed without errors)
 /// Обертка для последовательных валидаций (Следующая валидация запускается, только после того, что предыдущая прошла без ошибок)
@@ -311,8 +312,8 @@ ValidatorsFunction<TAbstractControl>
         List<ValidatorsFunction<TAbstractControl>> validators) {
   return (TAbstractControl control) async {
     for (final validator in validators) {
-      final validationResult =
-          await control.executeAsyncValidation((control) => validator(control));
+      final validationResult = await control.executeAsyncValidation(
+          (control) => validator(control as TAbstractControl));
       if (validationResult.length > 0) {
         return validationResult;
       }

@@ -45,7 +45,9 @@ abstract class _FormAbstractGroup extends AbstractControl with Store {
   }
 
   _FormAbstractGroup(
-      {bool Function() activate, dynamic additionalData, ControlTypes type})
+      {bool Function()? activate,
+      dynamic additionalData,
+      required ControlTypes type})
       : super(activate: activate, additionalData: additionalData, type: type);
 
   /// Set marker "Value has changed"
@@ -80,7 +82,7 @@ abstract class _FormAbstractGroup extends AbstractControl with Store {
     List<FormControl> controls = [];
     for (final control in this.getControls()) {
       if (control.type == ControlTypes.Control) {
-        controls.add(control);
+        controls.add(control as FormControl<dynamic>);
       } else if (control.type == ControlTypes.Group ||
           control.type == ControlTypes.Array) {
         controls.addAll((control as FormAbstractGroup).allControls());

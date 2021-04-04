@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mfvkte/components/input/input-component.dart';
-import 'package:mfvkte/stores/registration/registration-store.dart';
+import 'package:test_example/components/input/input-component.dart';
+import 'package:test_example/stores/registration/registration-store.dart';
 
 class Registration extends StatefulWidget {
-  const Registration({Key key}) : super(key: key);
+  const Registration({Key? key}) : super(key: key);
 
   @override
   _RegistrationState createState() => _RegistrationState();

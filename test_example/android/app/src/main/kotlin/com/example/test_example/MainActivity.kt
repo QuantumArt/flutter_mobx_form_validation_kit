@@ -1,4 +1,4 @@
-package com.example.mfvkte
+package com.example.test_example
 
 import io.flutter.embedding.android.FlutterActivity
 

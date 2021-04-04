@@ -96,7 +96,7 @@ abstract class _AbstractControl with Store {
   /// Additional (server) errors
   /// Дополнительтные (серверные) ошибки
   set serverErrors(List<String> value) {
-    this._serverErrors = ObservableList.of(value ?? []);
+    this._serverErrors = ObservableList.of(value);
   }
 
   @observable
@@ -195,12 +195,11 @@ abstract class _AbstractControl with Store {
       {
       // Function enable validation by condition (always enabled by default)
       // Функция включение валидаций по условию (по умолчанию включено всегда)
-      bool Function() activate,
+      bool Function()? activate,
       this.additionalData,
-      this.type}) {
-    this.inProcessing = false;
-    this._isActiveFunc = activate ?? () => true;
-  }
+      required this.type})
+      : this.inProcessing = false,
+        this._isActiveFunc = (activate ?? () => true);
 
   /// Dispose (call in unmount react control)
   /// Вызвать при удалении контрола
@@ -210,17 +209,20 @@ abstract class _AbstractControl with Store {
 
   /// Get error by key
   /// Получить ошибку по ключу
-  ValidationEvent error(String key) {
-    return this.errors.firstWhere((err) => err.key == key, orElse: () => null);
+  ValidationEvent? error(String key) {
+    return this
+        .errors
+        .cast<ValidationEvent?>()
+        .firstWhere((err) => err!.key == key, orElse: () => null);
   }
 
   int _newRequestValidation = 0;
   List<ValidatorsFunction<AbstractControl>> _lastValidators = [];
   Function lastValidationFunction = (() {});
-  
+
   @protected
   List<ReactionDisposer> reactionOnValidatorDisposers = [];
-  
+
   @protected
   @action
   Future onValidation<TAbstractControl extends AbstractControl>(
@@ -230,7 +232,8 @@ abstract class _AbstractControl with Store {
     final haveRequestValidation = this._newRequestValidation != 0;
     this._newRequestValidation++;
     this._lastValidators = validators
-        .map((validator) => (AbstractControl control) => validator(control))
+        .map((validator) =>
+            (AbstractControl control) => validator(control as TAbstractControl))
         .toList();
     this.lastValidationFunction = onValidationFunction;
     if (haveRequestValidation) {
@@ -250,7 +253,8 @@ abstract class _AbstractControl with Store {
                 reaction((_) {
                   dynamic result;
                   if (isFirstReaction) {
-                    result = validator(this).then(completer.complete);
+                    result = validator(this as AbstractControl)
+                        .then(completer.complete);
                   }
                   isFirstReaction = false;
                   return result;
@@ -282,8 +286,9 @@ abstract class _AbstractControl with Store {
     });
   }
 
-  Future<List<ValidationEvent>> executeAsyncValidation(
-      ValidatorsFunction<dynamic> validator);
+  Future<List<ValidationEvent>>
+      executeAsyncValidation<TAbstractControl extends AbstractControl>(
+          ValidatorsFunction<TAbstractControl> validator);
 
   void runInAction(Function action);
 
@@ -299,7 +304,8 @@ abstract class _AbstractControl with Store {
           reaction((_) {
             dynamic result;
             if (isFirstReaction) {
-              result = validator(this).then(completer.complete);
+              result =
+                  validator(this as TAbstractControl).then(completer.complete);
             }
             isFirstReaction = false;
             return result;

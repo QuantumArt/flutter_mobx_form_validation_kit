@@ -10,19 +10,6 @@ part of 'form-group.dart';
 
 mixin _$FormGroup<TControls extends ControlsCollection>
     on _FormGroup<TControls>, Store {
-  final _$_FormGroupActionController = ActionController(name: '_FormGroup');
-
-  @override
-  dynamic _checkGroupValidations() {
-    final _$actionInfo = _$_FormGroupActionController.startAction(
-        name: '_FormGroup._checkGroupValidations');
-    try {
-      return super._checkGroupValidations();
-    } finally {
-      _$_FormGroupActionController.endAction(_$actionInfo);
-    }
-  }
-
   @override
   String toString() {
     return '''

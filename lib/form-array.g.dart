@@ -35,17 +35,6 @@ mixin _$FormArray<TAbstractControl extends AbstractControl>
   final _$_FormArrayActionController = ActionController(name: '_FormArray');
 
   @override
-  dynamic _checkArrayValidations() {
-    final _$actionInfo = _$_FormArrayActionController.startAction(
-        name: '_FormArray._checkArrayValidations');
-    try {
-      return super._checkArrayValidations();
-    } finally {
-      _$_FormArrayActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void add(TAbstractControl element) {
     final _$actionInfo =
         _$_FormArrayActionController.startAction(name: '_FormArray.add');

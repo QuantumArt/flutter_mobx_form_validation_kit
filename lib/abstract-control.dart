@@ -217,52 +217,44 @@ abstract class _AbstractControl with Store {
   }
 
   int _newRequestValidation = 0;
-  List<ValidatorsFunction<AbstractControl>> _lastValidators = [];
-  Function lastValidationFunction = (() {});
-
   @protected
   List<ReactionDisposer> reactionOnValidatorDisposers = [];
 
   @protected
-  @action
-  Future onValidation<TAbstractControl extends AbstractControl>(
-      List<ValidatorsFunction<TAbstractControl>> validators,
-      Function onValidationFunction,
-      Function afterCheck) async {
+  onValidation<TAbstractControl extends AbstractControl>(
+      {required List<ValidatorsFunction<TAbstractControl>> validators,
+      required Function(Completer<List<ValidationEvent>> completer,
+              ValidatorsFunction<TAbstractControl> validator)
+          onCompleter,
+      required Function onValidationFunction,
+      required Function afterCheck}) async {
     final haveRequestValidation = this._newRequestValidation != 0;
     this._newRequestValidation++;
-    this._lastValidators = validators
-        .map((validator) =>
-            (AbstractControl control) => validator(control as TAbstractControl))
-        .toList();
-    this.lastValidationFunction = onValidationFunction;
     if (haveRequestValidation) {
       return;
     }
-    List<List<ValidationEvent>> groupErrors;
+    List<List<ValidationEvent>> groupErrors = [];
     int oldRequestValidation = 0;
     do {
       oldRequestValidation = this._newRequestValidation;
+      //await Future.delayed(Duration(microseconds: 1));
       this.reactionOnValidatorDisposers.forEach((r) => r());
       this.reactionOnValidatorDisposers = [];
       if (this.active) {
-        final errorsPromises = this._lastValidators.map((validator) {
+        final errorsPromises = validators.map((validator) {
           bool isFirstReaction = true;
           final completer = Completer<List<ValidationEvent>>();
           this.reactionOnValidatorDisposers.add(
-                reaction((_) {
-                  dynamic result;
+                when((_) {
                   if (isFirstReaction) {
-                    result = validator(this as AbstractControl)
-                        .then(completer.complete);
+                    onCompleter(completer, validator);
+                    return isFirstReaction = false;
                   }
-                  isFirstReaction = false;
-                  return result;
-                }, (_) => this.lastValidationFunction()),
+                  return true;
+                }, () => onValidationFunction()),
               );
           return completer.future;
         });
-
         groupErrors = await Future.wait(errorsPromises);
       } else {
         groupErrors = [];
@@ -281,9 +273,8 @@ abstract class _AbstractControl with Store {
           events.where((e) => e.type == ValidationEventTypes.Info).toList();
       this._successes =
           events.where((e) => e.type == ValidationEventTypes.Success).toList();
-
-      afterCheck();
     });
+    afterCheck();
   }
 
   Future<List<ValidationEvent>>

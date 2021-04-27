@@ -89,11 +89,13 @@ abstract class _FormGroup<TControls extends ControlsCollection>
   @override
   Iterable<AbstractControl> getControls() => this.controls.allFields();
 
-  @action
   _checkGroupValidations() {
     this.inProcessing = true;
-    this.onValidation(this._validators, this._checkGroupValidations,
-        () => this.inProcessing = false);
+    this.onValidation<FormGroup<TControls>>(
+        validators: this._validators,
+        onCompleter: (completer, validator) => validator(this as FormGroup<TControls>).then(completer.complete),
+        onValidationFunction: () => this._checkGroupValidations(),
+        afterCheck: () => this.inProcessing = false);
   }
 
   void runInAction(Function action) {

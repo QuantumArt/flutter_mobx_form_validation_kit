@@ -193,19 +193,6 @@ mixin _$AbstractControl on _AbstractControl, Store {
     });
   }
 
-  final _$onValidationAsyncAction =
-      AsyncAction('_AbstractControl.onValidation');
-
-  @override
-  Future<dynamic> onValidation<TAbstractControl extends AbstractControl>(
-      List<ValidatorsFunction<TAbstractControl>> validators,
-      Function onValidationFunction,
-      Function afterCheck) {
-    return _$onValidationAsyncAction.run(() => super
-        .onValidation<TAbstractControl>(
-            validators, onValidationFunction, afterCheck));
-  }
-
   @override
   String toString() {
     return '''

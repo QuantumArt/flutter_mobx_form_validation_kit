@@ -53,7 +53,7 @@ void main() {
               onChangeValidValue: setter,
               callSetterOnInitialize: false,
             ))));
-    
+
     await form.wait();
     expect(countCallSetter, 0);
     form.dispose();
@@ -338,6 +338,54 @@ void main() {
     expect(form.valid, false);
     expect(form.controls.field.errors.length, 1);
     expect(form.controls.field.errors[0].message, "не дата");
+
+    form.dispose();
+  });
+
+  test("group valid", () async {
+    final form = FormGroup(
+        FormDoubleFieldString(
+          primaryField: FormControl<String>(
+              value: "foo",
+              options: OptionsFormControl(
+                validators: [requiredValidator()],
+              )),
+          dependentField: FormControl<String>(
+              value: "bar",
+              options: OptionsFormControl(
+                validators: [requiredValidator()],
+              )),
+        ),
+        options: OptionsFormGroup(validators: [
+          (FormGroup<FormDoubleFieldString> group) async {
+            if (group.controls.primaryField.value ==
+                group.controls.dependentField.value) {
+              return [];
+            }
+            return [
+              ValidationEvent(
+                message: "error",
+              )
+            ];
+          }
+        ]));
+
+    await form.wait();
+    expect(form.valid, false);
+
+    runInAction(() => form.controls.dependentField.value = "foo");
+
+    await form.wait();
+    expect(form.valid, true);
+
+    runInAction(() => form.controls.dependentField.value = "bar");
+
+    await form.wait();
+    expect(form.valid, false);
+
+    runInAction(() => form.controls.primaryField.value = "bar");
+    await form.wait();
+    expect(form.valid, true);
 
     form.dispose();
   });

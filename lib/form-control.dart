@@ -232,7 +232,7 @@ abstract class _FormControl<TEntity> extends AbstractControl with Store {
         (this.errors.length > 0 || this.serverErrors.length > 0);
   }
 
-  FormControl<TEntity> setInitialValue({
+  void setInitialValue({
     TEntity? value,
     TEntity Function()? getterValue,
   }) {
@@ -270,8 +270,6 @@ abstract class _FormControl<TEntity> extends AbstractControl with Store {
       },
       fireImmediately: true,
     );
-
-    return this as FormControl<TEntity>;
   }
 
   @override
@@ -293,16 +291,19 @@ abstract class _FormControl<TEntity> extends AbstractControl with Store {
     this._reactionOnIsFocusedDisposer();
   }
 
-  @action
   void _checkInternalValue(bool shouldCallSetter) {
     this.inProcessing = true;
     this.onValidation<FormControl<TEntity>>(
-        this._validators, () => this._checkInternalValue(true), () {
-      if (shouldCallSetter && this.errors.length == 0) {
-        this._setValidValue(this._internalValue!);
-      }
-      this.inProcessing = false;
-    });
+        validators: this._validators,
+        onCompleter: (completer, validator) =>
+            validator(this as FormControl<TEntity>).then(completer.complete),
+        onValidationFunction: () => this._checkInternalValue(true),
+        afterCheck: () {
+          if (shouldCallSetter && this.errors.length == 0) {
+            this._setValidValue(this._internalValue!);
+          }
+          this.inProcessing = false;
+        });
   }
 
   void runInAction(Function action) {

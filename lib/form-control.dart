@@ -293,7 +293,7 @@ abstract class _FormControl<TEntity> extends AbstractControl with Store {
 
   void _checkInternalValue(bool shouldCallSetter) {
     this.inProcessing = true;
-    this.onValidation<FormControl<TEntity>>(
+    Future(() => this.onValidation<FormControl<TEntity>>(
         validators: this._validators,
         onCompleter: (completer, validator) =>
             validator(this as FormControl<TEntity>).then(completer.complete),
@@ -303,7 +303,7 @@ abstract class _FormControl<TEntity> extends AbstractControl with Store {
             this._setValidValue(this._internalValue!);
           }
           this.inProcessing = false;
-        });
+        }));
   }
 
   void runInAction(Function action) {

@@ -91,11 +91,12 @@ abstract class _FormGroup<TControls extends ControlsCollection>
 
   _checkGroupValidations() {
     this.inProcessing = true;
-    this.onValidation<FormGroup<TControls>>(
+    Future(() => this.onValidation<FormGroup<TControls>>(
         validators: this._validators,
-        onCompleter: (completer, validator) => validator(this as FormGroup<TControls>).then(completer.complete),
+        onCompleter: (completer, validator) =>
+            validator(this as FormGroup<TControls>).then(completer.complete),
         onValidationFunction: () => this._checkGroupValidations(),
-        afterCheck: () => this.inProcessing = false);
+        afterCheck: () => this.inProcessing = false));
   }
 
   void runInAction(Function action) {

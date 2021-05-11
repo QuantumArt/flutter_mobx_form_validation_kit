@@ -61,17 +61,17 @@ class RegistrationStore {
               min: FormControl<DateTime>(value: DateTime.now()),
               max: FormControl<DateTime>(value: DateTime.now())),
           options: OptionsFormGroup<FormRange>(validators: [
-            //(FormGroup<FormRange> group) async {
-              // if (group.controls.max.value.isBefore(group.controls.min.value)) {
-              //   return [
-              //     ValidationEvent(
-              //       message: 'Дата "от" больше даты "до"',
-              //       type: ValidationEventTypes.Error,
-              //     )
-              //   ];
-              // }
-              // return [];
-            //},
+            (FormGroup<FormRange> group) async {
+              if (group.controls.max.value.isBefore(group.controls.min.value)) {
+                return [
+                  ValidationEvent(
+                    message: 'Дата "от" больше даты "до"',
+                    type: ValidationEventTypes.Error,
+                  )
+                ];
+              }
+              return [];
+            },
           ])),
     ));
   }

@@ -95,13 +95,13 @@ abstract class _FormArray<TAbstractControl extends AbstractControl>
 
   _checkArrayValidations() {
     this.inProcessing = true;
-    this.onValidation<FormArray<TAbstractControl>>(
+    Future(() => this.onValidation<FormArray<TAbstractControl>>(
         validators: this._validators,
         onCompleter: (completer, validator) =>
             validator(this as FormArray<TAbstractControl>)
                 .then(completer.complete),
         onValidationFunction: () => this._checkArrayValidations(),
-        afterCheck: () => this.inProcessing = false);
+        afterCheck: () => this.inProcessing = false));
   }
 
   void runInAction(Function action) {

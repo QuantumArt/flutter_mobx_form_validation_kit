@@ -23,7 +23,7 @@ class _InputComponent extends State<InputComponent> {
                 children: [
                   TextField(
                       focusNode: widget.control.focusNode,
-                      //controller: widget.control.controller,
+                      controller: widget.control.controller,
                       onChanged: (String text) => widget.control.value = text,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),

@@ -8,7 +8,7 @@ part of 'abstract-control.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
-mixin _$AbstractControl on _AbstractControl, Store {
+mixin _$AbstractControl<Fake> on _AbstractControl<Fake>, Store {
   Computed<bool>? _$disabledComputed;
 
   @override

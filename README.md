@@ -12,22 +12,12 @@
 flutter_mobx_form_validation_kit ^1.0.0 | 2.0.0 - Flutter 1
 flutter_mobx_form_validation_kit ^2.1.0 - Flutter 2
 
-
-
-- [Before Started](#before_started2)
 - [Getting Started](#get_started2)
 - [Состояние контрола](#state_control_rus2)
 - [Валидация](#validation_rus2)
 - [Проверка перед отправкой](#submit_rus2)
 - [Заключение](#final_rus2)
 
-### Before Started<a name="before_started2">
-
-Changed environment in pubspec.yaml
-```
-environment:
-  sdk: ">=2.12.0 <3.0.0"
-```
 
 ### Getting Started<a name="get_started2">
 Библиотеку можно применять при разных подходах к структуре кода, но я буду рассматривать библиотеку в концепции MVC (Model-View-Controller).

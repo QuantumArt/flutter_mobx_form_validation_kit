@@ -17,7 +17,7 @@ typedef ValidatorsFunction<TAbstractControl extends AbstractControl>
 
 abstract class AbstractControl = _AbstractControl with _$AbstractControl;
 
-abstract class _AbstractControl with Store {
+abstract class _AbstractControl<Fake> with Store {
   /// Type
   /// Тип контрола
   final ControlTypes type;
